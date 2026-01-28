@@ -299,9 +299,119 @@ const Navbar = () => {
     );
 };
 
+/* --- VISUAL EFFECT COMPONENTS --- */
+
+const ParticleNetwork = () => {
+    return (
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-full opacity-30">
+                {[...Array(20)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute bg-blue-500/30 rounded-full"
+                        initial={{
+                            x: Math.random() * 100 + "vw",
+                            y: Math.random() * 100 + "vh",
+                            scale: Math.random() * 0.5 + 0.5,
+                        }}
+                        animate={{
+                            x: [
+                                Math.random() * 100 + "vw",
+                                Math.random() * 100 + "vw",
+                                Math.random() * 100 + "vw",
+                            ],
+                            y: [
+                                Math.random() * 100 + "vh",
+                                Math.random() * 100 + "vh",
+                                Math.random() * 100 + "vh",
+                            ],
+                        }}
+                        transition={{
+                            duration: Math.random() * 20 + 20,
+                            repeat: Infinity,
+                            ease: "linear",
+                        }}
+                        style={{
+                            width: Math.random() * 4 + 1 + "px",
+                            height: Math.random() * 4 + 1 + "px",
+                        }}
+                    />
+                ))}
+            </div>
+            {/* Connection Lines (Simulated with SVG for performance) */}
+            <svg className="absolute inset-0 w-full h-full opacity-10">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-blue-500" />
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+    );
+};
+
+const TiltCard = ({ children }) => {
+    const x = motion.useMotionValue(0);
+    const y = motion.useMotionValue(0);
+    const rotateX = motion.useTransform(y, [-100, 100], [5, -5]);
+    const rotateY = motion.useTransform(x, [-100, 100], [-5, 5]);
+
+    function handleMouseMove(event) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+        const xPct = mouseX / width - 0.5;
+        const yPct = mouseY / height - 0.5;
+        x.set(xPct * width);
+        y.set(yPct * height);
+    }
+
+    function handleMouseLeave() {
+        x.set(0);
+        y.set(0);
+    }
+
+    return (
+        <motion.div
+            style={{
+                perspective: 1000,
+            }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="h-full"
+        >
+            <motion.div
+                style={{
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d",
+                }}
+                className="relative h-full transition-shadow duration-300 ease-out"
+            >
+                {/* Holographic Shine Effect */}
+                <motion.div
+                    style={{
+                        x: motion.useTransform(x, [-200, 200], [-100, 100]),
+                        y: motion.useTransform(y, [-200, 200], [-100, 100]),
+                    }}
+                    className="absolute inset-0 z-10 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 hover:opacity-100 pointer-events-none rounded-3xl transition-opacity duration-300 mix-blend-overlay"
+                />
+
+                {children}
+            </motion.div>
+        </motion.div>
+    );
+};
+
 const Hero = () => {
     return (
         <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-slate-950">
+            {/* Digital Nervous System Background */}
+            <ParticleNetwork />
+
             {/* Background Gradients */}
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px]" />
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px]" />
@@ -317,15 +427,17 @@ const Hero = () => {
                         <img
                             src="https://whmbrguzumyatnslzfsq.supabase.co/storage/v1/object/public/Agents/528133800_122098887482967786_7658994577312817335_n%20(1).jpg"
                             alt="Seif Elshamy"
-                            className="w-full h-full object-cover object-top rounded-full"
+                            className="w-full h-full object-cover object-top rounded-full relative z-10"
                             style={{
                                 maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
                                 WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)'
                             }}
                         />
+                        {/* Glowing ring behind photo */}
+                        <div className="absolute inset-0 rounded-full border border-blue-500/20 shadow-[0_0_50px_rgba(59,130,246,0.3)] animate-pulse z-0"></div>
                     </div>
 
-                    <div className="inline-block px-4 py-1 mb-6 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-sm font-medium">
+                    <div className="inline-block px-4 py-1 mb-6 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-sm font-medium backdrop-blur-md">
                         Available for new projects
                     </div>
                     <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-tight">
@@ -339,10 +451,10 @@ const Hero = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <a href="#work" className="px-8 py-4 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
+                        <a href="#work" className="px-8 py-4 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-blue-600/30">
                             View Case Studies <ArrowRight size={18} />
                         </a>
-                        <a href="#contact" className="px-8 py-4 bg-slate-800 text-white rounded-full font-medium hover:bg-slate-700 transition-all border border-slate-700">
+                        <a href="#contact" className="px-8 py-4 bg-slate-800 text-white rounded-full font-medium hover:bg-slate-700 transition-all border border-slate-700 hover:border-slate-500">
                             Contact Me
                         </a>
                     </div>
@@ -445,81 +557,85 @@ const ProjectShowcase = () => {
                 </div>
 
                 {PROJECTS.map((project) => (
-                    <div key={project.id} className="bg-slate-950 rounded-3xl border border-white/10 overflow-hidden shadow-2xl mb-16 last:mb-0">
-                        {/* Header / Info */}
-                        <div className="p-8 md:p-12 border-b border-white/5">
-                            <div className="flex flex-wrap gap-3 mb-6">
-                                {project.tech.map(t => (
-                                    <span key={t} className="px-3 py-1 text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full">
-                                        {t}
-                                    </span>
-                                ))}
-                            </div>
-                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">{project.title}</h3>
-                            <p className="text-xl text-slate-300 mb-6 italic">{project.subtitle}</p>
-                            <p className="text-slate-400 leading-relaxed max-w-4xl">{project.description}</p>
-
-                            {project.media.find(m => m.type === 'video') && (
-                                <button
-                                    onClick={() => setActiveModal(project.media.find(m => m.type === 'video'))}
-                                    className="mt-8 group flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full font-bold hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] transition-all duration-300 transform hover:-translate-y-1"
-                                >
-                                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        <Play size={14} className="text-blue-600 fill-blue-600 ml-0.5" />
+                    <div key={project.id} className="mb-16 last:mb-0">
+                        <TiltCard>
+                            <div className="bg-slate-950 rounded-3xl border border-white/10 overflow-hidden shadow-2xl h-full">
+                                {/* Header / Info */}
+                                <div className="p-8 md:p-12 border-b border-white/5">
+                                    <div className="flex flex-wrap gap-3 mb-6">
+                                        {project.tech.map(t => (
+                                            <span key={t} className="px-3 py-1 text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full">
+                                                {t}
+                                            </span>
+                                        ))}
                                     </div>
-                                    Watch Full Video
-                                </button>
-                            )}
-                        </div>
+                                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">{project.title}</h3>
+                                    <p className="text-xl text-slate-300 mb-6 italic">{project.subtitle}</p>
+                                    <p className="text-slate-400 leading-relaxed max-w-4xl">{project.description}</p>
 
-                        {/* Media Grid */}
-                        <div className="p-8 md:p-12 bg-slate-900/50">
-                            <h4 className="text-white font-semibold mb-6 flex items-center gap-2">
-                                <Database size={20} className="text-purple-400" /> System Architecture & Demos
-                            </h4>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {/* Highlight Video (Spans 2 cols on desktop) */}
-                                {project.media.filter(m => m.type === 'video').map((item, idx) => (
-                                    <div key={idx} className="md:col-span-2 relative group rounded-xl overflow-hidden aspect-video border border-white/10 cursor-pointer"
-                                        onClick={() => setActiveModal(item)}>
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all z-10">
-                                            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center pl-1 shadow-lg group-hover:scale-110 transition-transform">
-                                                <Play fill="white" className="text-white" />
+                                    {project.media.find(m => m.type === 'video') && (
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); setActiveModal(project.media.find(m => m.type === 'video')); }}
+                                            className="mt-8 group flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full font-bold hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] transition-all duration-300 transform hover:-translate-y-1 relative z-20"
+                                        >
+                                            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                <Play size={14} className="text-blue-600 fill-blue-600 ml-0.5" />
                                             </div>
-                                        </div>
-                                        <video className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
-                                            <source src={item.url} type="video/mp4" />
-                                        </video>
-                                        <div className="absolute bottom-4 left-4 z-20">
-                                            <span className="bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">Video Demo</span>
-                                        </div>
+                                            Watch Full Video
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Media Grid */}
+                                <div className="p-8 md:p-12 bg-slate-900/50">
+                                    <h4 className="text-white font-semibold mb-6 flex items-center gap-2">
+                                        <Database size={20} className="text-purple-400" /> System Architecture & Demos
+                                    </h4>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {/* Highlight Video (Spans 2 cols on desktop) */}
+                                        {project.media.filter(m => m.type === 'video').map((item, idx) => (
+                                            <div key={idx} className="md:col-span-2 relative group rounded-xl overflow-hidden aspect-video border border-white/10 cursor-pointer"
+                                                onClick={(e) => { e.stopPropagation(); setActiveModal(item); }}>
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all z-10">
+                                                    <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center pl-1 shadow-lg group-hover:scale-110 transition-transform">
+                                                        <Play fill="white" className="text-white" />
+                                                    </div>
+                                                </div>
+                                                <video className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                                                    <source src={item.url} type="video/mp4" />
+                                                </video>
+                                                <div className="absolute bottom-4 left-4 z-20">
+                                                    <span className="bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">Video Demo</span>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        {/* Image Grid */}
+                                        {project.media.filter(m => m.type === 'image').map((item, idx) => (
+                                            <motion.div
+                                                key={idx}
+                                                whileHover={{ y: -5 }}
+                                                className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-slate-800 border border-white/10 cursor-pointer"
+                                                onClick={(e) => { e.stopPropagation(); setActiveModal(item); }}
+                                            >
+                                                <img
+                                                    src={item.url}
+                                                    alt={item.label}
+                                                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                                                    <p className="text-white text-sm font-medium">{item.label}</p>
+                                                    <div className="flex items-center text-blue-400 text-xs mt-1 gap-1">
+                                                        <Maximize2 size={12} /> Click to expand
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        ))}
                                     </div>
-                                ))}
-
-                                {/* Image Grid */}
-                                {project.media.filter(m => m.type === 'image').map((item, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        whileHover={{ y: -5 }}
-                                        className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-slate-800 border border-white/10 cursor-pointer"
-                                        onClick={() => setActiveModal(item)}
-                                    >
-                                        <img
-                                            src={item.url}
-                                            alt={item.label}
-                                            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-                                            <p className="text-white text-sm font-medium">{item.label}</p>
-                                            <div className="flex items-center text-blue-400 text-xs mt-1 gap-1">
-                                                <Maximize2 size={12} /> Click to expand
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                </div>
                             </div>
-                        </div>
+                        </TiltCard>
                     </div>
                 ))}
             </div>
