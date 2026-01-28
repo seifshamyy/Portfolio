@@ -580,20 +580,19 @@ const ProjectShowcase = () => {
                             </div>
                         </div>
                     </div>
-                    </div>
                 ))}
-        </div>
+            </div>
 
-    {
-        activeModal && (
-            <Modal
-                src={activeModal.url}
-                type={activeModal.type}
-                label={activeModal.label}
-                onClose={() => setActiveModal(null)}
-            />
-        )
-    }
+            {
+                activeModal && (
+                    <Modal
+                        src={activeModal.url}
+                        type={activeModal.type}
+                        label={activeModal.label}
+                        onClose={() => setActiveModal(null)}
+                    />
+                )
+            }
         </section >
     );
 };
