@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import {
     Cpu,
     Workflow,
@@ -352,10 +352,10 @@ const ParticleNetwork = () => {
 };
 
 const TiltCard = ({ children }) => {
-    const x = motion.useMotionValue(0);
-    const y = motion.useMotionValue(0);
-    const rotateX = motion.useTransform(y, [-100, 100], [5, -5]);
-    const rotateY = motion.useTransform(x, [-100, 100], [-5, 5]);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const rotateX = useTransform(y, [-100, 100], [5, -5]);
+    const rotateY = useTransform(x, [-100, 100], [-5, 5]);
 
     function handleMouseMove(event) {
         const rect = event.currentTarget.getBoundingClientRect();
@@ -394,8 +394,8 @@ const TiltCard = ({ children }) => {
                 {/* Holographic Shine Effect */}
                 <motion.div
                     style={{
-                        x: motion.useTransform(x, [-200, 200], [-100, 100]),
-                        y: motion.useTransform(y, [-200, 200], [-100, 100]),
+                        x: useTransform(x, [-200, 200], [-100, 100]),
+                        y: useTransform(y, [-200, 200], [-100, 100]),
                     }}
                     className="absolute inset-0 z-10 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 hover:opacity-100 pointer-events-none rounded-3xl transition-opacity duration-300 mix-blend-overlay"
                 />
