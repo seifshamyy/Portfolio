@@ -740,6 +740,44 @@ const Capabilities = () => {
     );
 };
 
+const DentistReveal = () => {
+    return (
+        <section className="py-24 bg-slate-900 border-t border-white/5 relative overflow-hidden">
+            <div className="absolute inset-0 bg-blue-600/5 blur-3xl"></div>
+            <div className="container mx-auto px-6 relative z-10 text-center">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-gradient-to-br from-blue-900/40 to-slate-900 border border-blue-500/30 p-12 rounded-3xl max-w-4xl mx-auto shadow-2xl relative"
+                >
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-6 py-2 rounded-full font-bold text-sm tracking-widest uppercase shadow-lg border border-blue-400">
+                        Plot Twist!
+                    </div>
+
+                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-6 mt-4">
+                        I am also a <span className="text-blue-400">Dentist!</span> 🦷
+                    </h3>
+
+                    <p className="text-slate-300 text-lg mb-8 leading-relaxed max-w-2xl mx-auto">
+                        When I'm not automating workflows, I'm perfecting smiles. It's all about precision, aesthetics, and solving complex problems—whether in code or in the clinic.
+                    </p>
+
+                    <a
+                        href="https://whmbrguzumyatnslzfsq.supabase.co/storage/v1/object/public/Agents/DrSeif%20Elshamy_241031_235029_compressed%20(1).pdf"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-900 font-bold rounded-full hover:bg-blue-50 transition-all transform hover:-translate-y-1 shadow-lg"
+                    >
+                        <ExternalLink size={20} /> View Dentist Portfolio
+                    </a>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
+
 const Contact = () => {
     return (
         <section id="contact" className="py-24 bg-slate-900 border-t border-white/10">
@@ -778,6 +816,7 @@ const App = () => {
             <MoreAgents />
             <ProcessOptimization />
             <Capabilities />
+            <DentistReveal />
             <Contact />
 
             {/* Tailwind Custom Animations Style Block */}
