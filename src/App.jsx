@@ -1252,13 +1252,23 @@ const CursorGlow = () => {
 
 const FloatingCTA = () => {
     const [isHovered, setIsHovered] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
         <motion.a
-            href="#contact"
+            href={isMobile ? "tel:+201069591087" : "#contact"}
             className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-950/90 backdrop-blur-md border border-emerald-500/30 text-emerald-400 py-3 px-5 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all overflow-hidden group"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onMouseEnter={() => !isMobile && setIsHovered(true)}
+            onMouseLeave={() => !isMobile && setIsHovered(false)}
             initial={false}
             layout
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
@@ -1269,17 +1279,19 @@ const FloatingCTA = () => {
 
             <div className="flex items-center overflow-hidden whitespace-nowrap">
                 <span className="font-bold text-sm ml-1">Let's Talk</span>
-                <motion.span
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{
-                        width: isHovered ? "auto" : 0,
-                        opacity: isHovered ? 1 : 0
-                    }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="font-bold text-sm overflow-hidden"
-                >
-                    &nbsp;and see how we can supercharge your business
-                </motion.span>
+                {!isMobile && (
+                    <motion.span
+                        initial={{ width: 0, opacity: 0 }}
+                        animate={{
+                            width: isHovered ? "auto" : 0,
+                            opacity: isHovered ? 1 : 0
+                        }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="font-bold text-sm overflow-hidden"
+                    >
+                        &nbsp;and see how we can supercharge your business
+                    </motion.span>
+                )}
             </div>
         </motion.a>
     );
