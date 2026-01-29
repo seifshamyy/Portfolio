@@ -477,6 +477,57 @@ const LogoItem = ({ client, index }) => {
     );
 };
 
+const AboutMe = () => {
+    return (
+        <section id="about" className="py-24 bg-slate-900">
+            <div className="container mx-auto px-6">
+                <div className="mb-16 text-center">
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">About Me</h2>
+                    <div className="w-20 h-1 bg-blue-500 rounded-full mx-auto"></div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    {/* What I Do */}
+                    <div className="bg-slate-950 p-8 rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all group">
+                        <div className="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <Cpu className="text-blue-400" size={28} />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-4">What I Do</h3>
+                        <p className="text-slate-400 leading-relaxed">
+                            I design and deploy <span className="text-blue-400 font-medium">AI-driven automation systems</span> that remove operational bottlenecks and replace fragile manual workflows. My focus is turning chaotic, high-volume operations into <span className="text-slate-200">stable, scalable systems</span> with measurable impact.
+                        </p>
+                    </div>
+
+                    {/* Experience & Impact */}
+                    <div className="bg-slate-950 p-8 rounded-2xl border border-white/10 hover:border-purple-500/30 transition-all group">
+                        <div className="w-14 h-14 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <Sparkles className="text-purple-400" size={28} />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-4">Experience & Impact</h3>
+                        <p className="text-slate-400 leading-relaxed mb-4">
+                            Currently at <span className="text-purple-400 font-medium">Egypt Best Properties</span> as an RPA & AI Consultant/Engineer, automating end-to-end real estate operations.
+                        </p>
+                        <p className="text-slate-400 leading-relaxed">
+                            Founder of <span className="text-purple-400 font-medium">Flowmatic Labs</span> — an AI automation agency building production-grade agents, RPA systems, and workflow automations that reduce overhead and scale decision-making.
+                        </p>
+                    </div>
+
+                    {/* How I Help */}
+                    <div className="bg-slate-950 p-8 rounded-2xl border border-white/10 hover:border-emerald-500/30 transition-all group">
+                        <div className="w-14 h-14 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <Workflow className="text-emerald-400" size={28} />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-4">How I Help You Transform</h3>
+                        <p className="text-slate-400 leading-relaxed">
+                            I help businesses move from <span className="text-slate-200">people-dependent operations</span> to reliable, self-running systems. By identifying failure points, automating decision flows, and enforcing consistency at scale — teams operate <span className="text-emerald-400 font-medium">faster, leaner, and with far less risk</span>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
 const ClientMarquee = () => {
     return (
         <section id="clients" className="py-24 bg-slate-950 border-y border-white/5 overflow-hidden">
@@ -1147,6 +1198,7 @@ const App = () => {
             <CursorGlow />
             <Navbar />
             <Hero />
+            <AboutMe />
             <ClientMarquee />
             <ProjectShowcase />
             <MoreAgents />
