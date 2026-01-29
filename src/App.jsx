@@ -1068,94 +1068,7 @@ const Capabilities = () => {
     );
 };
 
-const DentistReveal = () => {
-    const [showWarning, setShowWarning] = useState(false);
 
-    return (
-        <section className="py-24 bg-slate-900 border-t border-white/5 relative overflow-hidden">
-            <div className="absolute inset-0 bg-blue-600/5 blur-3xl"></div>
-            <div className="container mx-auto px-6 relative z-10 text-center">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-gradient-to-br from-blue-900/40 to-slate-900 border border-blue-500/30 p-12 rounded-3xl max-w-4xl mx-auto shadow-2xl relative"
-                >
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-6 py-2 rounded-full font-bold text-sm tracking-widest uppercase shadow-lg border border-blue-400">
-                        Plot Twist!
-                    </div>
-
-                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-6 mt-4">
-                        I am also a <span className="text-blue-400">Dentist!</span> 🦷
-                    </h3>
-
-                    <p className="text-slate-300 text-lg mb-8 leading-relaxed max-w-2xl mx-auto">
-                        When I'm not automating workflows, I'm perfecting smiles. It's all about precision, aesthetics, and solving complex problems—whether in code or in the clinic.
-                    </p>
-
-                    <button
-                        onClick={() => setShowWarning(true)}
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-900 font-bold rounded-full hover:bg-blue-50 transition-all transform hover:-translate-y-1 shadow-lg cursor-pointer"
-                    >
-                        <ExternalLink size={20} /> View Dentist Portfolio
-                    </button>
-                </motion.div>
-            </div>
-            {/* Warning Modal */}
-            <AnimatePresence>
-                {showWarning && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-black/90 backdrop-blur-md"
-                            onClick={() => setShowWarning(false)}
-                        />
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-slate-900 border border-red-500/30 p-8 rounded-3xl shadow-2xl max-w-lg w-full relative z-10 mx-4"
-                        >
-                            <div className="flex flex-col items-center text-center">
-                                <div className="p-4 bg-red-500/10 rounded-full text-red-500 mb-6">
-                                    <AlertTriangle size={48} />
-                                </div>
-                                <h3 className="text-2xl font-bold text-white mb-4">Surgical Content Warning</h3>
-                                <p className="text-slate-300 mb-8 leading-relaxed">
-                                    This portfolio contains clinical documentation of oral surgical procedures.
-                                    Some images display blood and open wounds which may be <span className="text-red-400 font-bold">graphic in nature</span>.
-                                    <br /><br />
-                                    Please proceed with caution.
-                                </p>
-
-                                <div className="flex flex-col sm:flex-row gap-4 w-full">
-                                    <button
-                                        onClick={() => setShowWarning(false)}
-                                        className="flex-1 px-6 py-3 bg-slate-800 text-white font-semibold rounded-xl hover:bg-slate-700 transition-colors border border-slate-700"
-                                    >
-                                        Go Back
-                                    </button>
-                                    <a
-                                        href="https://whmbrguzumyatnslzfsq.supabase.co/storage/v1/object/public/Agents/DrSeif%20Elshamy_241031_235029_compressed%20(1).pdf"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        onClick={() => setShowWarning(false)}
-                                        className="flex-1 px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-red-900/20"
-                                    >
-                                        Proceed <ArrowRight size={18} />
-                                    </a>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-        </section>
-    );
-};
 
 const Contact = () => {
     return (
@@ -1169,9 +1082,7 @@ const Contact = () => {
                     <a href="mailto:connect@flowmaticlabs.com" className="px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-blue-50 transition-colors">
                         Email Me
                     </a>
-                    <a href="https://www.linkedin.com/in/seif-ahmed-801a59339/" target="_blank" rel="noreferrer" className="px-8 py-4 bg-slate-800 text-white font-bold rounded-full border border-slate-700 hover:bg-slate-700 transition-colors">
-                        LinkedIn
-                    </a>
+
                     <a href="tel:+201069591087" className="px-8 py-4 bg-slate-800 text-white font-bold rounded-full border border-slate-700 hover:bg-slate-700 transition-colors">
                         +20 106 959 1087
                     </a>
@@ -1309,7 +1220,7 @@ const App = () => {
             <MoreAgents />
             <ProcessOptimization />
             <Capabilities />
-            <DentistReveal />
+
             <Contact />
             <FloatingCTA />
 
