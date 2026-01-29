@@ -1075,8 +1075,7 @@ const Contact = () => {
     );
 };
 
-const MouseGlow = () => {
-    // Only mount on devices that support hover (non-touch)
+const CursorGlow = () => {
     const [isHoverSupported, setIsHoverSupported] = useState(false);
 
     useEffect(() => {
@@ -1093,9 +1092,10 @@ const MouseGlow = () => {
     const mouseX = useMotionValue(-100);
     const mouseY = useMotionValue(-100);
 
-    const springConfig = { damping: 15, stiffness: 500, mass: 0.1 };
-    const x = useSpring(mouseX, springConfig);
-    const y = useSpring(mouseY, springConfig);
+    // Slower spring for trailing effect (50% more trail)
+    const trailConfig = { damping: 20, stiffness: 100, mass: 0.5 };
+    const trailX = useSpring(mouseX, trailConfig);
+    const trailY = useSpring(mouseY, trailConfig);
 
     useEffect(() => {
         if (!isHoverSupported) return;
@@ -1112,24 +1112,39 @@ const MouseGlow = () => {
     if (!isHoverSupported) return null;
 
     return (
-        <motion.div
-            className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] mix-blend-screen"
-            style={{
-                x,
-                y,
-                translateX: "-50%",
-                translateY: "-50%",
-                backgroundColor: "transparent",
-                boxShadow: "0 0 100px 50px rgba(59, 130, 246, 0.75)"
-            }}
-        />
+        <>
+            {/* Main glow - zero lag, broader */}
+            <motion.div
+                className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] mix-blend-screen"
+                style={{
+                    x: mouseX,
+                    y: mouseY,
+                    translateX: "-50%",
+                    translateY: "-50%",
+                    backgroundColor: "transparent",
+                    boxShadow: "0 0 150px 75px rgba(59, 130, 246, 0.75)"
+                }}
+            />
+            {/* Trailing glow - delayed, softer */}
+            <motion.div
+                className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9998] mix-blend-screen"
+                style={{
+                    x: trailX,
+                    y: trailY,
+                    translateX: "-50%",
+                    translateY: "-50%",
+                    backgroundColor: "transparent",
+                    boxShadow: "0 0 200px 100px rgba(59, 130, 246, 0.4)"
+                }}
+            />
+        </>
     );
 };
 
 const App = () => {
     return (
         <div className="bg-slate-950 min-h-screen text-slate-200 selection:bg-blue-500/30 cursor-none sm:cursor-auto">
-            <MouseGlow />
+            <CursorGlow />
             <Navbar />
             <Hero />
             <ClientMarquee />
