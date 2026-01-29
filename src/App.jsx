@@ -30,7 +30,8 @@ import {
     ScanFace,
     MessageSquareText,
     Video,
-    Search
+    Search,
+    Phone
 } from 'lucide-react';
 
 /* --- DATA CONSTANTS --- */
@@ -272,7 +273,7 @@ const Navbar = () => {
                     <a href="#more-agents" className="hover:text-white transition-colors">More Agents</a>
                     <a href="#optimization" className="hover:text-white transition-colors">Efficiency</a>
                     <a href="#services" className="hover:text-white transition-colors">Stack</a>
-                    <a href="#contact" className="px-4 py-2 bg-white text-slate-900 rounded-full hover:bg-blue-50 transition-colors">Let's Talk</a>
+                    <a href="#services" className="hover:text-white transition-colors">Stack</a>
                 </div>
 
                 {/* Mobile Toggle */}
@@ -508,7 +509,7 @@ const AboutMe = () => {
                             Currently at <span className="text-purple-400 font-medium">Egypt Best Properties</span> as an RPA & AI Consultant/Engineer, automating end-to-end real estate operations.
                         </p>
                         <p className="text-slate-400 leading-relaxed">
-                            Founder of <span className="text-purple-400 font-medium">Flowmatic Labs</span> — an AI automation agency building production-grade agents, RPA systems, and workflow automations that reduce overhead and scale decision-making.
+                            Founder of <a href="https://www.flowmaticlabs.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 font-medium inline-flex items-center hover:text-purple-300 transition-colors underline underline-offset-2">Flowmatic Labs<ExternalLink size={12} className="ml-0.5 -mt-2" /></a> — an AI automation agency building production-grade agents, RPA systems, and workflow automations that reduce overhead and scale decision-making.
                         </p>
                     </div>
 
@@ -717,7 +718,7 @@ const ProjectShowcase = () => {
                                         <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                                             <Play size={14} className="text-blue-600 fill-blue-600 ml-0.5" />
                                         </div>
-                                        Watch Full Video
+                                        See agent in action
                                     </button>
                                 )}
 
@@ -742,23 +743,7 @@ const ProjectShowcase = () => {
                             </h4>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {/* Highlight Video (Spans 2 cols on desktop) */}
-                                {project.media.filter(m => m.type === 'video').map((item, idx) => (
-                                    <div key={idx} className="md:col-span-2 relative group rounded-xl overflow-hidden aspect-video border border-white/10 cursor-pointer"
-                                        onClick={(e) => { e.stopPropagation(); setActiveModal(item); }}>
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all z-10">
-                                            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center pl-1 shadow-lg group-hover:scale-110 transition-transform">
-                                                <Play fill="white" className="text-white" />
-                                            </div>
-                                        </div>
-                                        <video className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
-                                            <source src={item.url} type="video/mp4" />
-                                        </video>
-                                        <div className="absolute bottom-4 left-4 z-20">
-                                            <span className="bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">Video Demo</span>
-                                        </div>
-                                    </div>
-                                ))}
+
 
                                 {/* Image Grid */}
                                 {project.media.filter(m => m.type === 'image').map((item, idx) => (
@@ -1264,6 +1249,42 @@ const CursorGlow = () => {
     );
 };
 
+
+const FloatingCTA = () => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <motion.a
+            href="#contact"
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-950/90 backdrop-blur-md border border-emerald-500/30 text-emerald-400 py-3 px-5 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all overflow-hidden group"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            initial={false}
+            layout
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        >
+            <div className="flex items-center justify-center">
+                <Phone size={20} className="fill-emerald-400/20" />
+            </div>
+
+            <div className="flex items-center overflow-hidden whitespace-nowrap">
+                <span className="font-bold text-sm ml-1">Let's Talk</span>
+                <motion.span
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{
+                        width: isHovered ? "auto" : 0,
+                        opacity: isHovered ? 1 : 0
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="font-bold text-sm overflow-hidden"
+                >
+                    &nbsp;and see how we can supercharge your business
+                </motion.span>
+            </div>
+        </motion.a>
+    );
+};
+
 const App = () => {
     return (
         <div className="bg-slate-950 min-h-screen text-slate-200 selection:bg-blue-500/30 cursor-none sm:cursor-auto">
@@ -1278,6 +1299,7 @@ const App = () => {
             <Capabilities />
             <DentistReveal />
             <Contact />
+            <FloatingCTA />
 
             {/* Tailwind Custom Animations Style Block */}
             <style>{`
