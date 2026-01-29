@@ -1144,7 +1144,7 @@ const CursorGlow = () => {
     const mouseY = useMotionValue(-100);
 
     // Slower spring for trailing effect (50% more trail)
-    const trailConfig = { damping: 20, stiffness: 100, mass: 0.5 };
+    const trailConfig = { damping: 15, stiffness: 60, mass: 0.8 };
     const trailX = useSpring(mouseX, trailConfig);
     const trailY = useSpring(mouseY, trailConfig);
 
@@ -1164,28 +1164,26 @@ const CursorGlow = () => {
 
     return (
         <>
-            {/* Main glow - zero lag, broader */}
+            {/* Main glow - zero lag */}
             <motion.div
-                className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] mix-blend-screen"
+                className="fixed top-0 left-0 pointer-events-none z-[9999]"
                 style={{
                     x: mouseX,
                     y: mouseY,
-                    translateX: "-50%",
-                    translateY: "-50%",
-                    backgroundColor: "transparent",
-                    boxShadow: "0 0 150px 75px rgba(59, 130, 246, 0.75)"
+                    width: 0,
+                    height: 0,
+                    boxShadow: "0 0 150px 75px rgba(59, 130, 246, 0.7)"
                 }}
             />
-            {/* Trailing glow - delayed, softer */}
+            {/* Trailing glow - delayed, broader */}
             <motion.div
-                className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9998] mix-blend-screen"
+                className="fixed top-0 left-0 pointer-events-none z-[9998]"
                 style={{
                     x: trailX,
                     y: trailY,
-                    translateX: "-50%",
-                    translateY: "-50%",
-                    backgroundColor: "transparent",
-                    boxShadow: "0 0 200px 100px rgba(59, 130, 246, 0.4)"
+                    width: 0,
+                    height: 0,
+                    boxShadow: "0 0 220px 110px rgba(59, 130, 246, 0.35)"
                 }}
             />
         </>
