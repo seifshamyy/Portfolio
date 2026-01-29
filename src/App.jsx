@@ -24,7 +24,13 @@ import {
     Palette,
     Users,
     Wand2,
-    Layers
+    Layers,
+    MapPin,
+    GitMerge,
+    ScanFace,
+    MessageSquareText,
+    Video,
+    Search
 } from 'lucide-react';
 
 /* --- DATA CONSTANTS --- */
@@ -529,8 +535,84 @@ const Modal = ({ src, type, label, onClose }) => {
     );
 };
 
+/* --- FEATURE CONSTANTS --- */
+const AGENT_FEATURES = [
+    {
+        icon: <MapPin className="text-green-400" size={24} />,
+        title: "Smart Location & Shipping",
+        description: "Calculates shipping costs via Google Maps even without exact locations. Mentions of a street name or area are enough for precise estimates.",
+    },
+    {
+        icon: <GitMerge className="text-blue-400" size={24} />,
+        title: "56-Step Feedback Loop",
+        description: "Iterative prompt handling that covers 99% of edge cases with a smart escalation protocol for complex queries.",
+    },
+    {
+        icon: <ScanFace className="text-purple-400" size={24} />,
+        title: "Vision Model Integration",
+        description: "Trained on the specific product catalog for 100% accurate identification when users send photos or swipe to reply.",
+    },
+    {
+        icon: <MessageSquareText className="text-yellow-400" size={24} />,
+        title: "Intelligent Message Aggregation",
+        description: "Treats back-to-back user messages as a single context, delivering one cohesive response instead of multiple fragmented replies.",
+    },
+    {
+        icon: <Video className="text-pink-400" size={24} />,
+        title: "Human-Like Video Responses",
+        description: "Sends product videos instead of text descriptions when appropriate (e.g., 'What does it look like inside?'), mimicking natural human behavior.",
+    }
+];
+
+const FeaturePopup = ({ onClose }) => {
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={onClose}>
+            <div
+                className="max-w-2xl w-full bg-slate-900 border border-white/10 rounded-2xl p-8 relative shadow-2xl overflow-y-auto max-h-[90vh]"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+                >
+                    <X size={24} />
+                </button>
+
+                <div className="mb-8">
+                    <h3 className="text-2xl font-bold text-white mb-2">Full Feature Set</h3>
+                    <p className="text-slate-400">Advanced capabilities of the Alyousr Multimodal Agent</p>
+                </div>
+
+                <div className="space-y-6">
+                    {AGENT_FEATURES.map((feature, idx) => (
+                        <div key={idx} className="flex gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                            <div className="flex-shrink-0 mt-1">
+                                {feature.icon}
+                            </div>
+                            <div>
+                                <h4 className="text-lg font-bold text-slate-200 mb-1">{feature.title}</h4>
+                                <p className="text-slate-400 text-sm leading-relaxed">{feature.description}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-white/10 text-center">
+                    <button
+                        onClick={onClose}
+                        className="px-6 py-2 bg-slate-800 text-white rounded-full text-sm font-medium hover:bg-slate-700 transition-colors"
+                    >
+                        Close Features
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const ProjectShowcase = () => {
     const [activeModal, setActiveModal] = useState(null);
+    const [showFeatures, setShowFeatures] = useState(false);
 
     return (
         <section id="work" className="pt-24 pb-12 bg-slate-900">
@@ -555,17 +637,31 @@ const ProjectShowcase = () => {
                             <p className="text-xl text-slate-300 mb-6 italic">{project.subtitle}</p>
                             <p className="text-slate-400 leading-relaxed max-w-4xl">{project.description}</p>
 
-                            {project.media.find(m => m.type === 'video') && (
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setActiveModal(project.media.find(m => m.type === 'video')); }}
-                                    className="mt-8 group flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full font-bold hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] transition-all duration-300 transform hover:-translate-y-1 relative z-20"
-                                >
-                                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        <Play size={14} className="text-blue-600 fill-blue-600 ml-0.5" />
-                                    </div>
-                                    Watch Full Video
-                                </button>
-                            )}
+                            <div className="mt-8 flex flex-wrap gap-4">
+                                {project.media.find(m => m.type === 'video') && (
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setActiveModal(project.media.find(m => m.type === 'video')); }}
+                                        className="group flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full font-bold hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] transition-all duration-300 transform hover:-translate-y-1 relative z-20"
+                                    >
+                                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <Play size={14} className="text-blue-600 fill-blue-600 ml-0.5" />
+                                        </div>
+                                        Watch Full Video
+                                    </button>
+                                )}
+
+                                {project.id === 1 && (
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setShowFeatures(true); }}
+                                        className="group flex items-center gap-3 px-6 py-3 bg-slate-800 border border-green-500/30 text-green-400 rounded-full font-bold hover:bg-slate-700 hover:border-green-500/60 hover:shadow-[0_0_20px_rgba(74,222,128,0.2)] transition-all duration-300 transform hover:-translate-y-1 relative z-20"
+                                    >
+                                        <div className="w-8 h-8 bg-green-500/10 border border-green-500/30 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <Search size={16} className="text-green-400" />
+                                        </div>
+                                        View Full Feature Set
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
                         {/* Media Grid */}
@@ -628,6 +724,12 @@ const ProjectShowcase = () => {
                         label={activeModal.label}
                         onClose={() => setActiveModal(null)}
                     />
+                )
+            }
+
+            {
+                showFeatures && (
+                    <FeaturePopup onClose={() => setShowFeatures(false)} />
                 )
             }
         </section >
