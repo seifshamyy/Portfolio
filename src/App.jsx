@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import {
     Cpu,
     Workflow,
@@ -973,9 +973,61 @@ const Contact = () => {
     );
 };
 
+const MouseGlow = () => {
+    // Only mount on devices that support hover (non-touch)
+    const [isHoverSupported, setIsHoverSupported] = useState(false);
+
+    useEffect(() => {
+        const checkSupport = () => {
+            const hasMouse = window.matchMedia("(hover: hover)").matches;
+            const isLargeScreen = window.innerWidth >= 1024;
+            setIsHoverSupported(hasMouse && isLargeScreen);
+        };
+        checkSupport();
+        window.addEventListener('resize', checkSupport);
+        return () => window.removeEventListener('resize', checkSupport);
+    }, []);
+
+    const mouseX = useMotionValue(-100);
+    const mouseY = useMotionValue(-100);
+
+    const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
+    const x = useSpring(mouseX, springConfig);
+    const y = useSpring(mouseY, springConfig);
+
+    useEffect(() => {
+        if (!isHoverSupported) return;
+
+        const handleMouseMove = (e) => {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, [isHoverSupported, mouseX, mouseY]);
+
+    if (!isHoverSupported) return null;
+
+    return (
+        <motion.div
+            className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[9999] mix-blend-screen"
+            style={{
+                x,
+                y,
+                translateX: "-50%",
+                translateY: "-50%",
+                background: "radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(59,130,246,0) 70%)",
+                boxShadow: "0 0 100px 60px rgba(59, 130, 246, 0.25)"
+            }}
+        />
+    );
+};
+
 const App = () => {
     return (
-        <div className="bg-slate-950 min-h-screen text-slate-200 selection:bg-blue-500/30">
+        <div className="bg-slate-950 min-h-screen text-slate-200 selection:bg-blue-500/30 cursor-none sm:cursor-auto">
+            <MouseGlow />
             <Navbar />
             <Hero />
             <ClientMarquee />
