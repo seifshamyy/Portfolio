@@ -411,56 +411,93 @@ const Hero = () => {
     );
 };
 
-/* 
-   Improved Client Marquee 
-   - Removes CSS animation bugs
-   - Implements seamless infinite scroll using Framer Motion
-   - Adds "Center Magnification" effect
-*/
+/* --- MARQUEE COMPONENTS --- */
+
+const LogoItem = ({ client, index }) => {
+    const itemRef = React.useRef(null);
+    const scale = useMotionValue(1);
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Fisheye Effect Logic
+    React.useEffect(() => {
+        let frameId;
+
+        const updateScale = () => {
+            if (!itemRef.current) return;
+
+            const rect = itemRef.current.getBoundingClientRect();
+            const viewportCenter = window.innerWidth / 2;
+            const itemCenter = rect.left + rect.width / 2;
+            const distance = Math.abs(viewportCenter - itemCenter);
+
+            const maxDistance = 300;
+
+            let targetScale = 1;
+
+            if (distance < maxDistance) {
+                const proximity = 1 - (distance / maxDistance);
+                const eased = proximity * proximity;
+                targetScale = 1 + (eased * 0.6);
+            }
+
+            if (isHovered) {
+                targetScale += 0.2;
+            }
+
+            scale.set(targetScale);
+
+            frameId = requestAnimationFrame(updateScale);
+        };
+
+        updateScale();
+        return () => cancelAnimationFrame(frameId);
+    }, [isHovered, scale]);
+
+    return (
+        <motion.div
+            ref={itemRef}
+            style={{ scale }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="w-48 mx-8 flex-shrink-0 flex items-center justify-center transition-colors duration-300"
+        >
+            <img
+                src={client.logo}
+                alt={client.name}
+                // REMOVED grayscale and opacity-70 here
+                className="max-h-24 max-w-full object-contain drop-shadow-lg"
+            />
+        </motion.div>
+    );
+};
+
 const ClientMarquee = () => {
     return (
-        <section id="clients" className="py-20 bg-slate-950 border-y border-white/5 overflow-hidden">
-            <div className="container mx-auto px-6 mb-12 text-center">
+        <section id="clients" className="py-24 bg-slate-950 border-y border-white/5 overflow-hidden">
+            <div className="container mx-auto px-6 mb-16 text-center">
                 <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest">Trusted By Market Leaders</p>
             </div>
 
-            <div className="relative w-full max-w-[100vw] overflow-hidden mask-gradient">
-                {/* 
-                    We use a container that is wide enough to hold multiple copies.
-                    We animate it effectively. But for "middle larger", we need a different approach.
-                    Standard Marquee + localized scaling is hard.
-                    Let's use a simpler robust marquee first to fix the "bug".
-                    To fake the 'middle larger', we can use a static lens? No.
-                    We will rely on simple hover effects for now to ensure stability, 
-                    OR we can use a 'Carousel' instead if the user wants focus?
-                    The user said "make it spin".
-                    
-                    Let's stick to a robust standard marquee without the glitchy CSS.
-                 */}
-                <div className="flex w-max animate-marquee-smooth hover:[animation-play-state:paused]">
+            <div className="relative w-full max-w-[100vw] overflow-hidden mask-gradient-wide">
+                <div className="flex w-max animate-marquee-smooth hover:[animation-play-state:paused] items-center">
+                    {/* Triple duplication for smooth infinite loop coverage */}
                     {[...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS].map((client, idx) => (
-                        <div key={`${client.name}-${idx}`} className="w-64 mx-8 flex items-center justify-center transition-all duration-300 hover:scale-125 grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
-                            <img
-                                src={client.logo}
-                                alt={client.name}
-                                className="max-h-24 object-contain"
-                            />
-                        </div>
+                        <LogoItem key={`${client.name}-${idx}`} client={client} index={idx} />
                     ))}
                 </div>
             </div>
 
             <style>{`
-                .mask-gradient {
-                    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-                    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                .mask-gradient-wide {
+                    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+                    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
                 }
                 @keyframes marquee-smooth {
                     0% { transform: translateX(0); }
                     100% { transform: translateX(-50%); } 
                 }
                 .animate-marquee-smooth {
-                    animation: marquee-smooth 40s linear infinite;
+                    animation: marquee-smooth 60s linear infinite; /* Slower for better appreciation of effect */
                 }
             `}</style>
         </section>
