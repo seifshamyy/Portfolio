@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useInView } from 'framer-motion';
 import {
     Cpu,
     Workflow,
@@ -666,15 +666,35 @@ const ProjectShowcase = () => {
     const [showFeatures, setShowFeatures] = useState(false);
 
     return (
-        <section id="work" className="pt-24 pb-12 bg-slate-900">
+        <section id="work" className="pt-24 pb-12 bg-slate-900 overflow-hidden">
             <div className="container mx-auto px-6">
-                <div className="mb-16">
+                <motion.div
+                    className="mb-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.6 }}
+                >
                     <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Featured Automation</h2>
-                    <div className="w-20 h-1 bg-blue-500 rounded-full"></div>
-                </div>
+                    <motion.div
+                        className="w-20 h-1 bg-blue-500 rounded-full"
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                    />
+                </motion.div>
 
-                {PROJECTS.map((project) => (
-                    <div key={project.id} className="bg-slate-950 rounded-3xl border border-white/10 overflow-hidden shadow-2xl mb-16 last:mb-0">
+                {PROJECTS.map((project, projectIdx) => (
+                    <motion.div
+                        key={project.id}
+                        className="bg-slate-950 rounded-3xl border border-white/10 overflow-hidden shadow-2xl mb-16 last:mb-0"
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-50px' }}
+                        transition={{ duration: 0.6, delay: projectIdx * 0.1 }}
+                        whileHover={{ borderColor: 'rgba(59, 130, 246, 0.3)' }}
+                    >
                         {/* Header / Info */}
                         <div className="p-8 md:p-12 border-b border-white/5">
                             <div className="flex flex-wrap gap-3 mb-6">
@@ -763,7 +783,7 @@ const ProjectShowcase = () => {
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
 
@@ -789,19 +809,36 @@ const ProjectShowcase = () => {
 
 const MoreAgents = () => {
     return (
-        <section id="more-agents" className="py-20 bg-slate-900 border-t border-white/5">
+        <section id="more-agents" className="py-20 bg-slate-900 border-t border-white/5 overflow-hidden">
             <div className="container mx-auto px-6">
-                <h3 className="text-2xl font-bold text-slate-300 mb-10 flex items-center gap-3">
-                    <Brain className="text-blue-500" /> More Agents in the Wild
-                </h3>
+                <motion.h3
+                    className="text-2xl font-bold text-slate-300 mb-10 flex items-center gap-3"
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                >
+                    <motion.span animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }}>
+                        <Brain className="text-blue-500" />
+                    </motion.span>
+                    More Agents in the Wild
+                </motion.h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {MORE_AGENTS.map((agent, idx) => (
-                        <div key={idx} className="bg-slate-950 p-8 rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all hover:translate-y-[-5px] group">
+                        <motion.div
+                            key={idx}
+                            className="bg-slate-950 p-8 rounded-2xl border border-white/10"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-50px' }}
+                            transition={{ duration: 0.5, delay: idx * 0.1 }}
+                            whileHover={{ y: -8, borderColor: 'rgba(59, 130, 246, 0.4)', boxShadow: '0 20px 40px rgba(59, 130, 246, 0.1)' }}
+                        >
                             <div className="flex justify-between items-start mb-6">
-                                <div className="p-3 bg-white/5 rounded-xl text-slate-300 group-hover:text-blue-400 transition-colors">
+                                <motion.div className="p-3 bg-white/5 rounded-xl text-slate-300" whileHover={{ scale: 1.1, rotate: 5 }}>
                                     {agent.icon}
-                                </div>
+                                </motion.div>
                                 <div className={`px-3 py-1 rounded-full text-xs font-bold border ${agent.status === 'Live' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'}`}>
                                     {agent.status}
                                 </div>
@@ -820,7 +857,7 @@ const MoreAgents = () => {
                                     </span>
                                 ))}
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>
@@ -832,21 +869,44 @@ const ProcessOptimization = () => {
     const [activeModal, setActiveModal] = useState(null);
 
     return (
-        <section id="optimization" className="py-24 bg-slate-950 relative border-t border-white/5">
+        <section id="optimization" className="py-24 bg-slate-950 relative border-t border-white/5 overflow-hidden">
             <div className="container mx-auto px-6">
-                <div className="mb-16">
+                <motion.div
+                    className="mb-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.6 }}
+                >
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="p-3 bg-emerald-500/10 rounded-lg">
+                        <motion.div
+                            className="p-3 bg-emerald-500/10 rounded-lg"
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                        >
                             <TrendingDown className="text-emerald-400 w-6 h-6" />
-                        </div>
+                        </motion.div>
                         <span className="text-emerald-400 font-bold tracking-wider text-sm uppercase">Operational Efficiency</span>
                     </div>
                     <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Business Process Optimization</h2>
-                    <div className="w-20 h-1 bg-emerald-500 rounded-full"></div>
-                </div>
+                    <motion.div
+                        className="w-20 h-1 bg-emerald-500 rounded-full"
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                    />
+                </motion.div>
 
-                {BPO_PROJECTS.map((project) => (
-                    <div key={project.id} className="bg-slate-900 rounded-3xl border border-white/10 overflow-hidden shadow-2xl mb-12 last:mb-0">
+                {BPO_PROJECTS.map((project, projectIdx) => (
+                    <motion.div
+                        key={project.id}
+                        className="bg-slate-900 rounded-3xl border border-white/10 overflow-hidden shadow-2xl mb-12 last:mb-0"
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-50px' }}
+                        transition={{ duration: 0.6, delay: projectIdx * 0.1 }}
+                        whileHover={{ borderColor: 'rgba(52, 211, 153, 0.3)' }}
+                    >
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
 
                             {/* Left Column: Context & Solution */}
@@ -925,25 +985,39 @@ const ProcessOptimization = () => {
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
 
                 {/* --- High-Velocity Workflows Grid --- */}
                 <div className="mt-24">
-                    <h3 className="text-2xl font-bold text-slate-300 mb-8 flex items-center gap-3">
+                    <motion.h3
+                        className="text-2xl font-bold text-slate-300 mb-8 flex items-center gap-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                    >
                         <Layers className="text-emerald-400" /> And much more...
-                    </h3>
+                    </motion.h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {ADDITIONAL_BPO.map((item, idx) => (
-                            <div key={idx} className="bg-slate-900/50 p-8 rounded-2xl border border-white/5 hover:bg-slate-900 hover:border-emerald-500/30 transition-all duration-300 group">
-                                <div className="mb-6 p-4 bg-slate-950 rounded-xl inline-block group-hover:scale-110 transition-transform">
+                            <motion.div
+                                key={idx}
+                                className="bg-slate-900/50 p-8 rounded-2xl border border-white/5"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true, margin: '-50px' }}
+                                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                                whileHover={{ backgroundColor: 'rgb(15 23 42)', borderColor: 'rgba(16, 185, 129, 0.3)', y: -5 }}
+                            >
+                                <motion.div className="mb-6 p-4 bg-slate-950 rounded-xl inline-block" whileHover={{ scale: 1.1 }}>
                                     {item.icon}
-                                </div>
+                                </motion.div>
                                 <h4 className="text-xl font-bold text-white mb-3">{item.title}</h4>
                                 <p className="text-slate-400 text-sm leading-relaxed">
                                     {item.desc}
                                 </p>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
