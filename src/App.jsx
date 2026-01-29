@@ -857,6 +857,8 @@ const Capabilities = () => {
 };
 
 const DentistReveal = () => {
+    const [showWarning, setShowWarning] = useState(false);
+
     return (
         <section className="py-24 bg-slate-900 border-t border-white/5 relative overflow-hidden">
             <div className="absolute inset-0 bg-blue-600/5 blur-3xl"></div>
@@ -880,16 +882,65 @@ const DentistReveal = () => {
                         When I'm not automating workflows, I'm perfecting smiles. It's all about precision, aesthetics, and solving complex problems—whether in code or in the clinic.
                     </p>
 
-                    <a
-                        href="https://whmbrguzumyatnslzfsq.supabase.co/storage/v1/object/public/Agents/DrSeif%20Elshamy_241031_235029_compressed%20(1).pdf"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-900 font-bold rounded-full hover:bg-blue-50 transition-all transform hover:-translate-y-1 shadow-lg"
+                    <button
+                        onClick={() => setShowWarning(true)}
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-900 font-bold rounded-full hover:bg-blue-50 transition-all transform hover:-translate-y-1 shadow-lg cursor-pointer"
                     >
                         <ExternalLink size={20} /> View Dentist Portfolio
-                    </a>
+                    </button>
                 </motion.div>
             </div>
+            {/* Warning Modal */}
+            <AnimatePresence>
+                {showWarning && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-black/90 backdrop-blur-md"
+                            onClick={() => setShowWarning(false)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-slate-900 border border-red-500/30 p-8 rounded-3xl shadow-2xl max-w-lg w-full relative z-10 mx-4"
+                        >
+                            <div className="flex flex-col items-center text-center">
+                                <div className="p-4 bg-red-500/10 rounded-full text-red-500 mb-6">
+                                    <AlertTriangle size={48} />
+                                </div>
+                                <h3 className="text-2xl font-bold text-white mb-4">Surgical Content Warning</h3>
+                                <p className="text-slate-300 mb-8 leading-relaxed">
+                                    This portfolio contains clinical documentation of oral surgical procedures.
+                                    Some images display blood and open wounds which may be <span className="text-red-400 font-bold">graphic in nature</span>.
+                                    <br /><br />
+                                    Please proceed with caution.
+                                </p>
+
+                                <div className="flex flex-col sm:flex-row gap-4 w-full">
+                                    <button
+                                        onClick={() => setShowWarning(false)}
+                                        className="flex-1 px-6 py-3 bg-slate-800 text-white font-semibold rounded-xl hover:bg-slate-700 transition-colors border border-slate-700"
+                                    >
+                                        Go Back
+                                    </button>
+                                    <a
+                                        href="https://whmbrguzumyatnslzfsq.supabase.co/storage/v1/object/public/Agents/DrSeif%20Elshamy_241031_235029_compressed%20(1).pdf"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        onClick={() => setShowWarning(false)}
+                                        className="flex-1 px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-red-900/20"
+                                    >
+                                        Proceed <ArrowRight size={18} />
+                                    </a>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </section>
     );
 };
