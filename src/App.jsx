@@ -991,7 +991,7 @@ const MouseGlow = () => {
     const mouseX = useMotionValue(-100);
     const mouseY = useMotionValue(-100);
 
-    const springConfig = { damping: 20, stiffness: 400, mass: 0.1 };
+    const springConfig = { damping: 15, stiffness: 500, mass: 0.1 };
     const x = useSpring(mouseX, springConfig);
     const y = useSpring(mouseY, springConfig);
 
@@ -1018,7 +1018,7 @@ const MouseGlow = () => {
                 translateX: "-50%",
                 translateY: "-50%",
                 backgroundColor: "transparent",
-                boxShadow: "0 0 80px 40px rgba(59, 130, 246, 0.6)"
+                boxShadow: "0 0 100px 50px rgba(59, 130, 246, 0.75)"
             }}
         />
     );
