@@ -508,6 +508,9 @@ const AboutMe = () => {
                         <p className="text-slate-400 leading-relaxed mb-4">
                             Currently at <span className="text-purple-400 font-medium">Egypt Best Properties</span> as an RPA & AI Consultant/Engineer, automating end-to-end real estate operations.
                         </p>
+                        <p className="text-slate-400 leading-relaxed mb-4">
+                            <span className="text-purple-400 font-medium">Trainer and AI Consultant at Mustaneer</span> — empowering teams with AI literacy and hands-on automation skills.
+                        </p>
                         <p className="text-slate-400 leading-relaxed">
                             Founder of <a href="https://www.flowmaticlabs.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 font-medium inline-flex items-center hover:text-purple-300 transition-colors underline underline-offset-2">Flowmatic Labs<ExternalLink size={12} className="ml-0.5 -mt-2" /></a> — an AI automation agency building production-grade agents, RPA systems, and workflow automations that reduce overhead and scale decision-making.
                         </p>
